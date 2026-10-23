@@ -93,33 +93,33 @@ var L=[
 ["B2","Upper-Intermediate","Tienes un nivel sólido y funcional. Pulir detalles y ganar fluidez te llevará a un nivel profesional."],
 ["C1","Advanced","Tu inglés es avanzado. Podemos enfocarnos en precisión, acento y comunicación profesional o académica."]
 ];
-var i=0,score=0,lead={};
+var i=0,score=0,lead=null;
 function $(x){return document.getElementById(x)}
 function show(x){["s1","s2","s3"].forEach(function(k){$(k).classList.toggle("hide",k!==x)})}
 
-// URL de envío de tu Google Form
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdmq-BcmsnXxz68LxkEsOuWNcMClJ0uFqL4DxDmVHYtXP-B9Q/formResponse";
+/* ===== Envío de leads a Google Forms ===== */
+var FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSdmq-BcmsnXxz68LxkEsOuWNcMClJ0uFqL4DxDmVHYtXP-B9Q/formResponse";
+var ENT={
+  name:"entry.748087167",
+  email:"entry.893944539",
+  whatsapp:"entry.2126429755",
+  status:"entry.1146088037",
+  levelName:"entry.2021880641",
+  level:"entry.532598295"
+};
 
-function sendToGoogleForm(data) {
-  try {
-    var fd = new URLSearchParams();
-    fd.append("entry.748087167", data.name || "");
-    fd.append("entry.893944539", data.email || "");
-    fd.append("entry.2126429755", data.whatsapp || "");
-    fd.append("entry.1146088037", data.status || "started");
-    fd.append("entry.2021880641", data.levelLargo || "En proceso");
-    fd.append("entry.532598295", data.levelCorto || "N/A");
-
-    fetch(FORM_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: fd
-    }).catch(function(err) {
-      console.error("Error al enviar a Google Form:", err);
+function save(data){
+  try{
+    var all=Object.assign({},lead,data);
+    var body=new URLSearchParams();
+    for(var k in ENT){ if(all[k]!==undefined) body.append(ENT[k],all[k]); }
+    fetch(FORM_URL,{
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:body
     });
-  } catch(e) {
-    console.error(e);
-  }
+  }catch(e){console.error(e)}
 }
 
 $("go").onclick=function(){
@@ -128,21 +128,9 @@ $("go").onclick=function(){
   if(!/^\S+@\S+\.\S+$/.test(e))return $("err").textContent="Revisa tu correo electrónico.";
   if(p.replace(/\D/g,"").length<7)return $("err").textContent="Escribe un número de WhatsApp válido.";
   $("err").textContent="";
-  
-  lead={name:n, email:e, whatsapp:p};
-
-  // Envía el registro inicial (started) para capturar abandonos
-  sendToGoogleForm({
-    name: n,
-    email: e,
-    whatsapp: p,
-    status: "started",
-    levelLargo: "En proceso",
-    levelCorto: "N/A"
-  });
-
-  show("s2");
-  render();
+  lead={name:n,email:e,whatsapp:p,status:"started"};
+  save({});
+  show("s2");render();
 };
 
 function render(){
@@ -161,38 +149,18 @@ function render(){
 function finish(){
   var idx=score<=3?0:score<=6?1:score<=9?2:score<=12?3:4;
   var r=L[idx];
-  $("lv").textContent=r[0];
-  $("lt").textContent=r[1];
-  $("ld").textContent=r[2];
+  $("lv").textContent=r[0];$("lt").textContent=r[1];$("ld").textContent=r[2];
   $("sc").textContent="Puntaje: "+score+" / "+Q.length;
-  
-  // Envía el registro final (completed) con el nivel y puntaje obtenido
-  sendToGoogleForm({
-    name: lead.name,
-    email: lead.email,
-    whatsapp: lead.whatsapp,
-    status: "completed",
-    levelLargo: r[1],  // Ej: Upper-Intermediate
-    levelCorto: r[0]   // Ej: B2
-  });
-
+  save({status:"completed",level:r[0],levelName:r[1]});
   var name=lead.name,mail=lead.email,wa=lead.whatsapp;
   (function(){
     var m="Hola FluentFlow IA Academy, soy "+name+". Mi nivel en el test fue "+r[0]+" ("+score+"/"+Q.length+"). Mi correo: "+mail+" / WhatsApp: "+wa+". Quiero mi clase de prueba gratis.";
-    $("msg").value=m;
-    $("cta").href="https://wa.me/50372132238?text="+encodeURIComponent(m);
-    $("cp").onclick=function(){
-      var t=$("msg");t.select();
-      var ok=function(){$("cp").textContent="¡Copiado!"};
-      try{
-        navigator.clipboard.writeText(t.value).then(ok,function(){document.execCommand("copy");ok()})
-      }catch(e){
-        try{document.execCommand("copy");ok()}catch(x){}
-      }
-    };
+    $("msg").value=m;$("cta").href="https://wa.me/50372132238?text="+encodeURIComponent(m);
+    $("cp").onclick=function(){var t=$("msg");t.select();var ok=function(){$("cp").textContent="¡Copiado!"};try{navigator.clipboard.writeText(t.value).then(ok,function(){document.execCommand("copy");ok()})}catch(e){try{document.execCommand("copy");ok()}catch(x){}}};
   })();
   show("s3");
 }
 </script>
 </body>
 </html>
+
