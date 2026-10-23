@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Free English Placement Test | FluentFlow IA Academy</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#14162b;--mu:#62667f;--pr:#5b4bff;--pr2:#00c2a8;--bd:#e3e5f0;--ok:#0a9d6b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1020;--card:#1a1c33;--tx:#f1f2ff;--mu:#a3a7c4;--bd:#2c2f4d;--pr:#7d70ff}}
+:root[data-theme="dark"]{--bg:#0f1020;--card:#1a1c33;--tx:#f1f2ff;--mu:#a3a7c4;--bd:#2c2f4d;--pr:#7d70ff}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:20px 14px}
+.w{width:100%;max-width:480px}
+.brand{text-align:center;font-weight:800;letter-spacing:.3px;margin-bottom:14px}
+.brand span{background:linear-gradient(90deg,var(--pr),var(--pr2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:22px}
+h1{font-size:1.5rem;line-height:1.25;margin:0 0 8px}
+p{margin:0 0 14px;color:var(--mu)}
+label{display:block;font-size:.85rem;font-weight:600;margin:12px 0 4px}
+input{width:100%;padding:12px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-size:1rem}
+button{font:inherit;cursor:pointer}
+.btn{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:linear-gradient(90deg,var(--pr),var(--pr2));color:#fff;font-weight:700;font-size:1rem}
+.opt{display:block;width:100%;text-align:left;margin-top:10px;padding:13px 14px;border:1.5px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--tx)}
+.opt:active,.opt:hover{border-color:var(--pr)}
+.bar{height:8px;background:var(--bd);border-radius:99px;overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pr),var(--pr2));transition:width .3s}
+.meta{display:flex;justify-content:space-between;font-size:.8rem;color:var(--mu);margin-bottom:16px}
+.q{font-size:1.2rem;font-weight:700;margin:0}
+.lvl{font-size:4rem;font-weight:900;text-align:center;line-height:1;background:linear-gradient(90deg,var(--pr),var(--pr2));-webkit-background-clip:text;background-clip:text;color:transparent;margin:6px 0}
+.c{text-align:center}.err{color:#d93a4a;font-size:.85rem;min-height:1.2em;margin-top:8px}
+.small{font-size:.75rem;color:var(--mu);text-align:center;margin-top:12px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="brand">Fluent<span>Flow</span> IA Academy</div>
+
+  <div class="card" id="s1">
+    <h1>Descubre tu nivel de inglés en 4 minutos 🎯</h1>
+    <p>Test gratuito de 15 preguntas. Al terminar verás tu nivel (A1–C1) y una recomendación personalizada.</p>
+    <label for="n">Nombre</label><input id="n" autocomplete="name" placeholder="Tu nombre">
+    <label for="e">Correo electrónico</label><input id="e" type="email" autocomplete="email" placeholder="tu@correo.com">
+    <label for="p">WhatsApp</label><input id="p" type="tel" autocomplete="tel" placeholder="+503 0000 0000">
+    <div class="err" id="err"></div>
+    <button class="btn" id="go">Empezar test gratis →</button>
+    <div class="small">Tus datos solo se usan para enviarte tu resultado y orientación de FluentFlow IA Academy.</div>
+  </div>
+
+  <div class="card hide" id="s2">
+    <div class="bar"><i id="pb"></i></div>
+    <div class="meta"><span id="cnt"></span><span>Elige la opción correcta</span></div>
+    <p class="q" id="q"></p>
+    <div id="o"></div>
+  </div>
+
+  <div class="card hide c" id="s3">
+    <p style="margin-bottom:0">Tu nivel de inglés es</p>
+    <div class="lvl" id="lv"></div>
+    <h1 id="lt"></h1>
+    <p id="ld"></p>
+    <p><b id="sc"></b></p>
+    <a class="btn" id="cta" target="_blank" rel="noopener noreferrer" style="display:block;text-decoration:none;text-align:center">Quiero mi clase de prueba gratis</a>
+    <p class="small">¿No abre WhatsApp? Copia tu mensaje y envíalo al <b>+503 7213 2238</b>:</p>
+    <textarea id="msg" readonly rows="4" style="width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;font-size:.85rem"></textarea>
+    <button class="btn" id="cp" style="margin-top:8px">Copiar mensaje</button>
+    <div class="small">Resultado orientativo. Una evaluación oral confirma tu nivel exacto.</div>
+  </div>
+</div>
+
+<script>
+var Q=[
+["She ___ a teacher.",["are","is","am","be"],1],
+["I ___ from El Salvador.",["am","is","are","be"],0],
+["They ___ two brothers.",["has","is","have","are"],2],
+["Yesterday I ___ to the market.",["go","goed","went","gone"],2],
+["There isn’t ___ milk in the fridge.",["some","any","a","many"],1],
+["My sister is taller ___ me.",["that","as","than","then"],2],
+["If it rains tomorrow, we ___ at home.",["will stay","stayed","would stay","are staying"],0],
+["I have lived here ___ 2019.",["for","since","from","during"],1],
+["He asked me where ___.",["do I live","I lived","did I live","I do live"],1],
+["I wish I ___ more time to study.",["have","had","would have","will have"],1],
+["By the time we arrived, the movie ___.",["started","has started","had already started","was starting"],2],
+["She suggested ___ the meeting.",["to postpone","postponing","postpone","to postponing"],1],
+["Had I known about the delay, I ___ earlier.",["would leave","will leave","would have left","left"],2],
+["Not only ___ late, but he also forgot the documents.",["he arrived","did he arrive","he did arrive","arrived he"],1],
+["The proposal was rejected, ___ the team’s efforts.",["although","despite","however","whereas"],1]
+];
+var L=[
+["A1","Beginner","Estás dando tus primeros pasos. Con una base sólida de vocabulario y frases clave puedes avanzar muy rápido."],
+["A2","Elementary","Ya manejas situaciones cotidianas simples. Es el momento ideal para ganar fluidez y confianza al hablar."],
+["B1","Intermediate","Te comunicas en la mayoría de situaciones. Con práctica guiada puedes dar el salto a un inglés más natural."],
+["B2","Upper-Intermediate","Tienes un nivel sólido y funcional. Pulir detalles y ganar fluidez te llevará a un nivel profesional."],
+["C1","Advanced","Tu inglés es avanzado. Podemos enfocarnos en precisión, acento y comunicación profesional o académica."]
+];
+var i=0,score=0,leadId=null,lead=null,db=null,uid=null;
+function $(x){return document.getElementById(x)}
+function show(x){["s1","s2","s3"].forEach(function(k){$(k).classList.toggle("hide",k!==x)})}
+
+(async function(){
+  try{
+    var c=window.claude&&await window.claude.use("db");
+    if(c){db=c;var u=await window.claude.use("user");if(u&&u.id)uid=await u.id()}
+  }catch(e){db=null}
+})();
+
+async function save(data){
+  try{
+    if(!db||!uid)return;
+    var d=db.doc("leads/"+uid);
+    await d.set(Object.assign({},lead,data,{at:new Date().toISOString()}));
+  }catch(e){console.error(e)}
+}
+
+$("go").onclick=function(){
+  var n=$("n").value.trim(),e=$("e").value.trim(),p=$("p").value.trim();
+  if(n.length<2)return $("err").textContent="Escribe tu nombre.";
+  if(!/^\S+@\S+\.\S+$/.test(e))return $("err").textContent="Revisa tu correo electrónico.";
+  if(p.replace(/\D/g,"").length<7)return $("err").textContent="Escribe un número de WhatsApp válido.";
+  $("err").textContent="";
+  lead={name:n,email:e,whatsapp:p,status:"started"};
+  save({});
+  show("s2");render();
+};
+
+function render(){
+  var q=Q[i];
+  $("cnt").textContent="Pregunta "+(i+1)+" de "+Q.length;
+  $("pb").style.width=(i/Q.length*100)+"%";
+  $("q").textContent=q[0];
+  var box=$("o");box.innerHTML="";
+  q[1].forEach(function(t,k){
+    var b=document.createElement("button");b.className="opt";b.textContent=t;
+    b.onclick=function(){if(k===q[2])score++;i++;i<Q.length?render():finish()};
+    box.appendChild(b);
+  });
+}
+
+function finish(){
+  var idx=score<=3?0:score<=6?1:score<=9?2:score<=12?3:4;
+  var r=L[idx];
+  $("lv").textContent=r[0];$("lt").textContent=r[1];$("ld").textContent=r[2];
+  $("sc").textContent="Puntaje: "+score+" / "+Q.length;
+  save({status:"completed",score:score,level:r[0]});
+  var name=lead.name,mail=lead.email,wa=lead.whatsapp;
+  (function(){
+    var m="Hola FluentFlow IA Academy, soy "+name+". Mi nivel en el test fue "+r[0]+" ("+score+"/"+Q.length+"). Mi correo: "+mail+" / WhatsApp: "+wa+". Quiero mi clase de prueba gratis.";
+    $("msg").value=m;$("cta").href="https://wa.me/50372132238?text="+encodeURIComponent(m);
+    $("cp").onclick=function(){var t=$("msg");t.select();var ok=function(){$("cp").textContent="¡Copiado!"};try{navigator.clipboard.writeText(t.value).then(ok,function(){document.execCommand("copy");ok()})}catch(e){try{document.execCommand("copy");ok()}catch(x){}}};
+  })();
+  show("s3");
+}
+</script>
+</body>
+</html>
